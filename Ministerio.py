@@ -5,7 +5,7 @@ Created on Wed Jul 14 12:10:56 2021
 @author: Juan
 """
 
-def main(DIRECTORIO, FOLDER, legajo, titulo_araucano, sede_araucano, promedio_con_aplazos, promedio_sin_aplazos):
+def main(db_name, db_user, db_host, db_port, db_password, data):
 
     # Se importan las funciones propias para querys y generación de txts
     from functions_min import query_ministerio_academicos, query_ministerio_personales, query_ministerio_analitico, generar_textfile
@@ -16,7 +16,7 @@ def main(DIRECTORIO, FOLDER, legajo, titulo_araucano, sede_araucano, promedio_co
 
     # Se genera una carpeta con el nombre ingresado en el directorio definido para
     # la creación de los archivos de salida
-    DIRECTORIO_TXTS = DIRECTORIO + FOLDER + '/'
+    DIRECTORIO_TXTS = DIRECTORIO + data['folder'] + '/'
     try:
         os.mkdir(DIRECTORIO_TXTS)
         put_text('Se crea el directorio...').style('color: red')
@@ -24,12 +24,12 @@ def main(DIRECTORIO, FOLDER, legajo, titulo_araucano, sede_araucano, promedio_co
         put_text('El directorio ya estaba creado...').style('color: red')
 
     # Se genera la conexión a la db postgresql
-    conn = psycopg2.connect(host="localhost", port = 5432, database="exportaciones_unlu", user="postgres", password="888888")
+    conn = psycopg2.connect(host=db_host, port = db_port, database=db_name, user=db_user, password=db_password)
 
     # Se transcriben los querys con los parámetros
-    query_academicos = query_ministerio_academicos(legajo, titulo_araucano, sede_araucano, promedio_con_aplazos, promedio_sin_aplazos)
-    query_personales = query_ministerio_personales(legajo)
-    query_analitico = query_ministerio_analitico(legajo)
+    query_academicos = query_ministerio_academicos(data['legajo'], data['titulo_araucano'], data['sede_araucano'], data['promedio_con_aplazos'], data['promedio_sin_aplazos'])
+    query_personales = query_ministerio_personales(data['legajo'])
+    query_analitico = query_ministerio_analitico(data['legajo'])
 
     # Se generan los txt
     generar_textfile(conn, query_academicos, DIRECTORIO_TXTS+'academicos.txt')
@@ -49,16 +49,22 @@ def main(DIRECTORIO, FOLDER, legajo, titulo_araucano, sede_araucano, promedio_co
 
 if __name__ == '__main__':
 
+    # Importo los datos de la base de datos
+    from database import DB_NAME, DB_USER, DB_HOST, DB_PORT, DB_PASS
+    
     # Importo las librerías para la renderización
     from pywebio.input import input, input_group, NUMBER, FLOAT   
-    from pywebio.output import put_text
+    from pywebio.output import put_text, clear
     
     # Se define el directorio de creación por defecto          
     DIRECTORIO = 'C:/Users/Juan/Desktop/'
     
+    # Limpio la pantalla
+    clear()
+    
     # Se define el formulario de ingreso de datos
     data = input_group("Generación de información para legalizaciones ante el Ministerio",[
-      input('Nombre de Carpeta de Salida (Convención: Apellido estudiante)', name='folder', required=True),
+      input('Nombre de Carpeta de Salida (Convención: apellido estudiante)', name='folder', required=True),
       input('Legajo del estudiante', name='legajo', type=NUMBER, required=True),
       input('Código de Tí­tulo Araucano', name='titulo_araucano', type=NUMBER, required=True),
       input('Código de Sede Araucano', name='sede_araucano', type=NUMBER, required=True),
@@ -66,9 +72,9 @@ if __name__ == '__main__':
       input('Promedio sin aplazos', name='promedio_sin_aplazos', type=FLOAT, required=True),
       input('Directorio de trabajo', name='DIRECTORIO', required=True, value=DIRECTORIO),
     ])
-    
+
     # Llamo a la función principal de procesamiento de datos
-    result = main(data['DIRECTORIO'], data['folder'], data['legajo'], data['titulo_araucano'], data['sede_araucano'], data['promedio_con_aplazos'], data['promedio_sin_aplazos'])
+    result = main(DB_NAME, DB_USER, DB_HOST, DB_PORT, DB_PASS, data)
     
     # Se muestra el resultado
     put_text(result).style('color: red')
