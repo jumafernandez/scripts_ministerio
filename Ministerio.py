@@ -8,7 +8,8 @@ Created on Wed Jul 14 12:10:56 2021
 def main(db_name, db_user, db_host, db_port, db_password, data):
 
     # Se importan las funciones propias para querys y generación de txts
-    from functions_min import query_ministerio_academicos, query_ministerio_personales, query_ministerio_analitico, generar_textfile
+    from functions_min import query_ministerio_academicos, query_ministerio_personales, query_ministerio_analitico
+    from functions_min import generar_textfile, get_info_araucano
     
     # Se importan las librerías para conectar a PostgreSQL y la creación de carpetas
     import psycopg2
@@ -26,6 +27,7 @@ def main(db_name, db_user, db_host, db_port, db_password, data):
     # Se genera la conexión a la db postgresql
     conn = psycopg2.connect(host=db_host, port = db_port, database=db_name, user=db_user, password=db_password)
 
+    data['sede_araucano'], data['titulo_araucano'] = get_info_araucano(data['PATH_INFO_ARAUCANO'], conn, data['legajo'])
     # Se transcriben los querys con los parámetros
     query_academicos = query_ministerio_academicos(data['legajo'], data['titulo_araucano'], data['sede_araucano'], data['promedio_con_aplazos'], data['promedio_sin_aplazos'])
     query_personales = query_ministerio_personales(data['legajo'])
@@ -59,6 +61,8 @@ if __name__ == '__main__':
     # Se define el directorio de creación por defecto          
     DIRECTORIO = 'C:/Users/Juan/Desktop/'
     
+    # Se define el origen del archivo con los códigos de Araucano por defecto
+    PATH_INFO_ARAUCANO = 'C:/Users/Juan/Documents/GitHub/scripts_ministerio/codigos-ministerio.xlsx'
     # Limpio la pantalla
     clear()
     
@@ -66,11 +70,12 @@ if __name__ == '__main__':
     data = input_group("Generación de información para legalizaciones ante el Ministerio",[
       input('Nombre de Carpeta de Salida (Convención: apellido estudiante)', name='folder', required=True),
       input('Legajo del estudiante', name='legajo', type=NUMBER, required=True),
-      input('Código de Tí­tulo Araucano', name='titulo_araucano', type=NUMBER, required=True),
-      input('Código de Sede Araucano', name='sede_araucano', type=NUMBER, required=True),
+#      input('Código de Tí­tulo Araucano', name='titulo_araucano', type=NUMBER, required=True),
+#      input('Código de Sede Araucano', name='sede_araucano', type=NUMBER, required=True),
       input('Promedio con aplazos', name='promedio_con_aplazos', type=FLOAT, required=True),
       input('Promedio sin aplazos', name='promedio_sin_aplazos', type=FLOAT, required=True),
-      input('Directorio de trabajo', name='DIRECTORIO', required=True, value=DIRECTORIO),
+      input('Directorio de trabajo', name='PATH_INFO_ARAUCANO', required=True, value=PATH_INFO_ARAUCANO, readonly=True),
+      input('Archivo con códigos Araucano', name='DIRECTORIO', required=True, value=DIRECTORIO),
     ])
 
     # Llamo a la función principal de procesamiento de datos
