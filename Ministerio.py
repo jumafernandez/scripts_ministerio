@@ -47,7 +47,7 @@ def main(db_name, db_user, db_host, db_port, db_password, data):
 
     # Se devuelve cadena de finalización del proceso
     return 'El proceso de generación de los archivos zip ha finalizado'
-   
+
 
 if __name__ == '__main__':
 
