@@ -63,15 +63,14 @@ if __name__ == '__main__':
     
     # Se define el origen del archivo con los códigos de Araucano por defecto
     PATH_INFO_ARAUCANO = 'C:/Users/Juan/Documents/GitHub/scripts_ministerio/codigos-ministerio.xlsx'
+
     # Limpio la pantalla
     clear()
     
     # Se define el formulario de ingreso de datos
     data = input_group("Generación de información para legalizaciones ante el Ministerio",[
-      input('Nombre de Carpeta de Salida (Convención: apellido estudiante)', name='folder', required=True),
+      input('Carpeta de Salida (convención: apellido del estudiante)', name='folder', required=True),
       input('Legajo del estudiante', name='legajo', type=NUMBER, required=True),
-#      input('Código de Tí­tulo Araucano', name='titulo_araucano', type=NUMBER, required=True),
-#      input('Código de Sede Araucano', name='sede_araucano', type=NUMBER, required=True),
       input('Promedio con aplazos', name='promedio_con_aplazos', type=FLOAT, required=True),
       input('Promedio sin aplazos', name='promedio_sin_aplazos', type=FLOAT, required=True),
       input('Directorio de trabajo', name='PATH_INFO_ARAUCANO', required=True, value=PATH_INFO_ARAUCANO, readonly=True),
