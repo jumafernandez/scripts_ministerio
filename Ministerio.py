@@ -69,7 +69,7 @@ if __name__ == '__main__':
     
     # Se define el formulario de ingreso de datos
     data = input_group("Generación de información para legalizaciones ante el Ministerio",[
-      input('Carpeta de Salida (convención: apellido del estudiante)', name='folder', required=True),
+      input('Nombre de archivo .zip (convención: apellido del estudiante)', name='folder', required=True),
       input('Legajo del estudiante', name='legajo', type=NUMBER, required=True),
       input('Promedio con aplazos', name='promedio_con_aplazos', type=FLOAT, required=True),
       input('Promedio sin aplazos', name='promedio_sin_aplazos', type=FLOAT, required=True),
