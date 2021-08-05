@@ -2,7 +2,7 @@
 """
 Created on Wed Jul 14 12:10:56 2021
 
-@author: Juan
+@author: Juan Manuel Fernandez
 """
 
 def main(db_name, db_user, db_host, db_port, db_password, data):
