@@ -120,8 +120,8 @@ def query_ministerio_academicos(legajo, titulo, sede, prom_ap, prom_sin_ap):
                     	'',
                     	'',
                     	'',
-                    	{prom_ap},     --Modificar promedio sin aplazos
-                    	{prom_sin_ap}, --Modificar promedio con aplazos
+                    	{prom_sin_ap},     --Modificar promedio sin aplazos
+                    	{prom_ap},         --Modificar promedio con aplazos
                     	'N'
                 FROM estudiantes e
                 WHERE legajo={legajo}; --Modificar legajo'
