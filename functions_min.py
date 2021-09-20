@@ -21,7 +21,7 @@ def generar_textfile(conexion, query, file_name, multi_rows=False):
             writer.writerow(result)
     cur.close()
 
-def query_ministerio_analitico(legajo):
+def query_ministerio_analitico(legajo, tipo='plan'):
     '''
     Parameters
     ----------
@@ -33,6 +33,9 @@ def query_ministerio_analitico(legajo):
     STRING con el query para PostgreSQL.
 
     '''
+    tipo_materias = "plan=e.plan_estudios"
+    if not(tipo=='plan'):
+        tipo_materias = "plan/100=e.plan_estudios/100"
     query = f'''
                 SELECT	'DNI',
                     	e.numero_documento,
@@ -51,7 +54,7 @@ def query_ministerio_analitico(legajo):
                 FROM finales f
                 INNER JOIN estudiantes e ON e.legajo=f.legajo
                 WHERE e.legajo={legajo} and f.calificacion<>99  --Modificar legajo
-                and f.asignatura in (select codigo from asignaturas where plan=e.plan_estudios);
+                and f.asignatura in (select codigo from asignaturas where {tipo_materias});
             '''
     return query
 

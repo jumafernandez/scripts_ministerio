@@ -31,7 +31,7 @@ def main(db_name, db_user, db_host, db_port, db_password, data):
     # Se transcriben los querys con los parámetros
     query_academicos = query_ministerio_academicos(data['legajo'], data['titulo_araucano'], data['sede_araucano'], data['promedio_con_aplazos'], data['promedio_sin_aplazos'])
     query_personales = query_ministerio_personales(data['legajo'])
-    query_analitico = query_ministerio_analitico(data['legajo'])
+    query_analitico = query_ministerio_analitico(data['legajo'], 'plan')
 
     # Se generan los txt
     generar_textfile(conn, query_academicos, DIRECTORIO_TXTS+'academicos.txt')
